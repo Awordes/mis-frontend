@@ -1,11 +1,14 @@
 <template>
   <nav class="top-menu" role="navigation">
     <ul class="menu-main">
+      <li class="left-item">
+        <router-link to="/auth" class="navbar-item">Авторизация</router-link>
+      </li>
       <li class="right-item">
         <router-link to="/" class="navbar-item">Главная</router-link>
       </li>
       <li class="right-item">
-        <router-link to="/auth" class="navbar-item">Авторизация</router-link>
+        <router-link to="/client" class="navbar-item">Список ВДС</router-link>
       </li>
       <li class="right-item">
         <router-link to="/admin" class="navbar-item"
@@ -24,12 +27,17 @@ export default {
 <style scoped>
 .top-menu {
   position: relative;
-  background: rgba(34, 34, 34, 0.2);
+  background: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  margin: 0 auto;
 }
 .menu-main {
   list-style: none;
   margin: 0;
   padding: 0;
+  width: 80%;
+  position: relative;
+  margin: 0 auto;
 }
 .menu-main:after {
   content: "";
@@ -51,15 +59,15 @@ export default {
   letter-spacing: 2px;
   font-family: "Arimo", sans-serif;
   font-weight: bold;
-  color: white;
+  color: rgb(32, 32, 32);
   transition: 0.3s linear;
 }
 .menu-main a:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.3);
 }
 @media (max-width: 830px) {
   .menu-main {
-    padding-top: 90px;
+    /* padding-top: 90px; */
     text-align: center;
   }
   .menu-main li {

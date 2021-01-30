@@ -17,23 +17,57 @@
           placeholder="Пароль"
         />
 
-        <button type="submit">Вход</button>
+        <button v-on:click="test" type="submit">Вход</button>
       </div>
     </div>
   </div>
 </template>
 
+
 <script>
+import axios from "axios"
+
 export default {
   name: "LoginForm",
+  data() {
+    return {
+      username: this.username,
+      password: this.password
+    }
+  },
+  methods: {
+    test: function () {
+      
+      axios
+      .post('http://192.168.0.150:5001/Auth/Login', {
+        "login": this.username,
+        "hashedPassword" : window.btoa(this.password)
+      },
+        {
+            headers: { 
+                "accept": "text/plain",
+                "Content-Type": "application/json-patch+json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
+            }
+        })
+      .then((response) => {
+        console.log(response.status);
+        this.$router.push("client")
+      }, (error) => {
+        alert(error);
+      })
+    }
+  }
 };
 </script>
 
 <style scoped>
 .login-wr {
   position: relative;
-  margin: 0 auto;
-  background: rgba(0, 0, 0, 0.7);
+  margin: 60px auto;
+  background: rgba(255, 255, 255, 0.7);
   max-width: 270px;
   box-shadow: 3px 3px 10px #333;
   padding: 15px 15px 0 15px;
@@ -81,14 +115,14 @@ input[type="password"] {
 
 input[type="text"]:focus,
 input[type="password"]:focus {
-  border-bottom: 1px solid #ccc;
-  color: #eee;
+  border-bottom: 1px solid rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
 }
 
 a {
   text-align: center;
   font-size: 12px;
-  color: #eee;
+  color: rgb(0, 0, 0);
 }
 
 button {
@@ -96,7 +130,7 @@ button {
   background: none;
   border: none;
   border: 1px solid #666;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 18px;
   font-weight: 200;
   cursor: pointer;

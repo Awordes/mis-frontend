@@ -22,6 +22,11 @@ export default new Router({
             path: '/client',
             name: 'client',
             component: () => import('../views/Client.vue'),
+        },
+        {
+            path: '/app',
+            name: 'app',
+            component: () => import('../App.vue'),
         }
     ]
 })

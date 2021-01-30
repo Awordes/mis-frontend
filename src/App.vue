@@ -25,7 +25,11 @@ export default {
   margin-top: 60px;
 }
 html {
-  background-image: url(./assets/bg.jpg);
+  background-image: url(./assets/bg-4.jpg);
+  width: 100%;
+  height: 100%;
+  background-attachment: fixed;
+  background-size: cover;  
   background-repeat: no-repeat;
 }
 </style>
