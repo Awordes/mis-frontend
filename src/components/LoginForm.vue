@@ -17,7 +17,8 @@
           placeholder="Пароль"
         />
 
-        <button v-on:click="test" type="submit">Вход</button>
+        <button v-on:click="login" type="submit">Вход</button>
+        
       </div>
     </div>
   </div>
@@ -25,7 +26,8 @@
 
 
 <script>
-import axios from "axios"
+
+import Vue from 'vue'
 
 export default {
   name: "LoginForm",
@@ -36,25 +38,16 @@ export default {
     }
   },
   methods: {
-    test: function () {
-      
-      axios
-      .post('http://192.168.0.150:5001/Auth/Login', {
+    login: function () {
+      Vue.axios
+      .post('/api/Auth/Login', {
         "login": this.username,
-        "hashedPassword" : window.btoa(this.password)
-      },
-        {
-            headers: { 
-                "accept": "text/plain",
-                "Content-Type": "application/json-patch+json",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-                "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
-            }
-        })
+        "password" : this.password,
+        "rememberMe" : true,
+      })
       .then((response) => {
-        console.log(response.status);
-        this.$router.push("client")
+        console.log(response);
+        this.$router.push("client");
       }, (error) => {
         alert(error);
       })

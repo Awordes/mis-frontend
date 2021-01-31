@@ -1,16 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-//const axios = require('axios');
-
 Vue.config.productionTip = false
 
-/*
-const token = localStorage.getItem('user-token')
-if (token) {
-  axios.defaults.headers.common['Authorization'] = token
-}
-*/
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+axios.defaults.withCredentials = true;
+
+Vue.use(VueAxios, axios);
 
 new Vue({
   router,
