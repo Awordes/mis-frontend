@@ -9,7 +9,6 @@ import VdsList from "../components/VdsList";
 
 import Vue from 'vue'
 
-
 export default {
   name: "Client",
   components: {
@@ -17,7 +16,7 @@ export default {
   },
   beforeCreate: function() { 
       Vue.axios
-      .get('/api/Auth/LoginCheck')
+      .get(this.$baseUrl + '/Auth/LoginCheck')
       .then((response) => {
         console.log(response.status);
       }, () => {

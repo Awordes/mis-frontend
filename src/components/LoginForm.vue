@@ -40,13 +40,13 @@ export default {
   methods: {
     login: function () {
       Vue.axios
-      .post('/api/Auth/Login', {
+      .post(this.$baseUrl + '/Auth/Login', {
         "login": this.username,
         "password" : this.password,
         "rememberMe" : true,
       })
       .then((response) => {
-        console.log(response);
+        console.log(response.status);
         this.$router.push("client");
       }, (error) => {
         alert(error);

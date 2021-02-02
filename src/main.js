@@ -9,6 +9,8 @@ axios.defaults.withCredentials = true;
 
 Vue.use(VueAxios, axios);
 
+Vue.prototype.$baseUrl = process.env.VUE_APP_API_URL;
+
 new Vue({
   router,
   render: h => h(App),
