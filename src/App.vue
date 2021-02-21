@@ -7,6 +7,7 @@
   </body>
 </template>
 <script>
+
 import Nav from "./components/partials/Nav.vue";
 export default {
   name: "app",

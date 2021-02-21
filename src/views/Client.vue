@@ -7,22 +7,22 @@
 <script>
 import VdsList from "../components/VdsList";
 
-import Vue from 'vue'
+//import Vue from 'vue'
 
 export default {
   name: "Client",
   components: {
     VdsList,
-  },
-  beforeCreate: function() { 
-      Vue.axios
-      .get(this.$baseUrl + '/Auth/LoginCheck')
-      .then((response) => {
-        console.log(response.status);
-      }, () => {
-        this.$router.push("auth")
-      })
   }
+  // beforeCreate: function() { 
+  //     Vue.axios
+  //     .get(this.$baseUrl + '/Auth/LoginCheck')
+  //     .then((response) => {
+  //       console.log(response.status);
+  //     }, () => {
+  //       this.$router.push("auth")
+  //     })
+  // }
 };
 </script>
 

@@ -39,6 +39,7 @@ export default {
   },
   methods: {
     login: function () {
+      this.$loaderStart()
       Vue.axios
       .post(this.$baseUrl + '/Auth/Login', {
         "login": this.username,

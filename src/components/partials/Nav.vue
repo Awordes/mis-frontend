@@ -4,23 +4,47 @@
       <li class="left-item">
         <router-link to="/auth" class="navbar-item">Авторизация</router-link>
       </li>
-      <li class="right-item">
+      <!-- <li class="right-item">
         <router-link to="/" class="navbar-item">Главная</router-link>
-      </li>
-      <li class="right-item">
-        <router-link to="/client" class="navbar-item">Список ВДС</router-link>
-      </li>
-      <li class="right-item">
+      </li> -->
+      
+      <!-- <li class="right-item">
         <router-link to="/admin" class="navbar-item"
           >Панель администратора</router-link
         >
+      </li> -->
+      <li class="right-item">
+        <button class="submit" v-on:click="logout">Выход</button>
+      </li>
+      <li class="right-item">
+        <router-link to="/client" class="navbar-item">Список ВДС</router-link>
       </li>
     </ul>
   </nav>
 </template>
 <script>
+
+import Vue from 'vue'
+
 export default {
   name: "Nav",
+  data() {
+    return {
+        //auth: this.$isAuthorized,
+    }
+  },
+  methods: {
+    logout: function() { 
+      Vue.axios
+      .post(this.$baseUrl + '/Auth/Logout')
+      .then(() => {
+          this.$isAuthorized = false;
+          this.$router.push("auth")
+      },  (error) => {
+          console.log(error);
+      })
+    }
+  },
 };
 </script>
 
@@ -47,10 +71,10 @@ export default {
 .left-item {
   float: left;
 }
-.right-item {
+.right-item, .right-item button{
   float: right;
 }
-.menu-main a {
+.menu-main a, .menu-main button {
   text-decoration: none;
   display: block;
   line-height: 80px;
@@ -67,7 +91,6 @@ export default {
 }
 @media (max-width: 830px) {
   .menu-main {
-    /* padding-top: 90px; */
     text-align: center;
   }
   .menu-main li {
@@ -84,5 +107,18 @@ export default {
   .menu-main li {
     display: block;
   }
+}
+
+.menu-main button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+.menu-main button:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 </style>

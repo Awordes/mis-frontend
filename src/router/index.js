@@ -11,22 +11,23 @@ export default new Router({
             path: '/auth',
             name: 'auth',
             component: () => import('../views/Auth.vue'),
-
         },
         {
             path: '/admin',
             name: 'admin',
             component: () => import('../views/Admin.vue'),
+            meta: { requiresAuth: true }
         },
         {
             path: '/client',
             name: 'client',
             component: () => import('../views/Client.vue'),
+            meta: { requiresAuth: true }
         },
         {
             path: '/app',
             name: 'app',
             component: () => import('../App.vue'),
         }
-    ]
+    ],
 })
