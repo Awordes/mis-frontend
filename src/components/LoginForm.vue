@@ -51,6 +51,7 @@ export default {
         this.$router.push("client");
       }, (error) => {
         alert(error);
+        this.$loaderEnd();
       })
     }
   }
