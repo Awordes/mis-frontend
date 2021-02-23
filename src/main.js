@@ -22,19 +22,27 @@ router.beforeResolve((to, from, next) => {
 });
 
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(route => route.meta.requiresAuth)) {      
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+
+    VueLoader.loaderStart();
     
-    Vue.axios
-    .get(Vue.prototype.$baseUrl + '/Auth/LoginCheck')
-    .then((response) => {
-      console.log(response.status);
-      next()
-    }, (error) => {
-      console.log(error);
+    var loginCheck = await (new Promise((resolve) => {
+          Vue.axios
+        .get(Vue.prototype.$baseUrl + '/Auth/LoginCheck')
+        .then(() => {
+          resolve(true);
+        }, () => {
+          resolve(false);
+        })
+      }));
+
+    VueLoader.loaderEnd();
+      
+    if (loginCheck)
+      next();
+    else
       next({name: 'auth'});
-      return
-    })  
   }   
   next()
 });
