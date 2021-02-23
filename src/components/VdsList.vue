@@ -4,18 +4,27 @@
     <div class="table">
         
         <div class="control">
-            <select class="select-css" v-model="selectedType">
-                <option v-for="type in types" v-bind:value="type.id" v-bind:key="type.id">
-                    {{ type.title }}
+            <select class="select-css large" v-model="selectedEnterprise">
+                <option v-for="enterprise in enterprises" v-bind:value="enterprise.id" v-bind:key="enterprise.id">
+                    {{ enterprise.name }}
                 </option>
             </select>
-            <select class="select-css" v-model="selectedStatus">
-                <option v-for="status in statuses" v-bind:value="status.id" v-bind:key="status.id">
-                    {{ status.title }}
-                </option>
-            </select>
-            <input type="number" v-model="count" />
-            <button class="submit" v-on:click="getVdsList">Получить список ВДС</button>
+            <div class="row">
+                <select class="select-css" v-model="selectedType">
+                    <option v-for="type in types" v-bind:value="type.id" v-bind:key="type.id">
+                        {{ type.title }}
+                    </option>
+                </select>
+                <select class="select-css" v-model="selectedStatus">
+                    <option v-for="status in statuses" v-bind:value="status.id" v-bind:key="status.id">
+                        {{ status.title }}
+                    </option>
+                </select>
+                <button class="submit" v-on:click="getVdsList">Получить список ВДС</button>
+            </div>
+
+
+            
         </div>
         
         <div v-show="visible">
@@ -41,6 +50,17 @@
                     
                 </tr>
             </table>
+
+            <div class="control">
+
+            <select class="select-css" v-model="pageSize">
+                <option v-for="size in pageSizes" v-bind:value="size.value" v-bind:key="size.value">
+                    {{ size.text }}
+                </option>
+            </select>
+
+            </div>
+
         </div>
     </div>
   </div>
@@ -56,11 +76,33 @@ export default {
   data() {
     return {
         vdsList: [],
-        count: 10,
         types: [],
         selectedType: Number,
         statuses: [],
         selectedStatus: Number,
+        enterprises: [],
+        selectedEnterprise: Number,
+        count: 10,
+        pageSize: 10,
+        pageSizes: [
+            {
+                value: 10,
+                text: "Показывать по: 10"
+            },
+            {
+                value: 20,
+                text: "Показывать по: 20"
+            },
+            {
+                value: 50,
+                text: "Показывать по: 50"
+            },
+            {
+                value: 100,
+                text: "Показывать по: 100"
+            },
+        ]
+        
     }
   },
     methods: {
@@ -69,10 +111,11 @@ export default {
             Vue.axios
             .get(this.$baseUrl + '/Vsd/GetVsdList', {
                 params: {
-                    "pageSize": this.count,
+                    "pageSize": this.pageSize,
                     "page" : 1,
                     "status" : this.selectedStatus,
                     "type" : this.selectedType,
+                    "enterpriseId": this.selectedEnterprise,
                 }
             })
             .then((response) => {
@@ -90,7 +133,7 @@ export default {
         .get(this.$baseUrl + '/Vsd/GetVsdTypes')
         .then((response) => {
             this.types = response.data.enumElements;
-            this.selectedType = response.data.enumElements[0].id;
+            this.selectedType = response.data.enumElements[3].id;
         },  (error) => {
             console.log(error);
         })
@@ -99,10 +142,20 @@ export default {
         .get(this.$baseUrl + '/Vsd/GetVsdStatuses')
         .then((response) => {
             this.statuses = response.data.enumElements;
-            this.selectedStatus = response.data.enumElements[0].id;
+            this.selectedStatus = response.data.enumElements[1].id;
         },  (error) => {
             console.log(error);
         })
+
+        Vue.axios
+        .get(this.$baseUrl + '/User/Current')
+        .then((response) => {
+            this.enterprises = response.data.enterprises;
+            this.selectedEnterprise = response.data.enterprises[0].id;
+        },  (error) => {
+            console.log(error);
+        })
+        
     },
     computed: {
         visible: function() {
@@ -153,15 +206,22 @@ export default {
     }
     .submit {
         cursor: pointer;
-        border: 1px solid #cecece;
-        background: #f6f6f6;
+        font-size: 16px; 
+        font-family: sans-serif; 
+        font-weight: 700; 
+        color: #444; 
+        border: 1px solid #aaa;
+        background: rgba(255, 255, 255, 0.7);
         box-shadow: inset 0px 20px 20px #ffffff;
-        border-radius: 3px;
-        padding: 6px 6px 10px 10px;
+        border-radius: 5px;
+        padding: 10px 6px;
+        margin: 0 10px;
         width: auto;
+        height: 100%;
     }
     .submit:hover {
         box-shadow: inset 0px -20px 20px #ffffff;
+        border-color: #888;
     }
     .submit:active {
         margin-top: 1px;
@@ -175,20 +235,19 @@ export default {
     .control {
         margin: 20px 0;
     }
-
-
-
     .select-css { 
+        cursor: pointer;
         display: inline-block; 
         font-size: 16px; 
         font-family: sans-serif; 
         font-weight: 700; 
         color: #444; 
         line-height: 1.3; 
-        padding: .6em 1.4em .5em .8em; width: 100%; 
+        padding: .6em 1.4em .5em .8em; 
+        width: 250px; 
         max-width: 100%; 
         box-sizing: border-box; 
-        margin: 0; 
+        margin: 10px; 
         border: 1px solid #aaa;
         box-shadow: 0 1px 0 1px rgba(0,0,0,.04); 
         border-radius: .5em;
@@ -209,10 +268,14 @@ export default {
         color: #222;
         outline: none; 
         } 
-        .select-css option { font-weight:normal; } 
+        .select-css option {  cursor: pointer; font-weight:normal; } 
         *[dir="rtl"] .select-css, :root:lang(ar) .select-css, :root:lang(iw) .select-css { 
         background-position: left .7em top 50%, 0 0; 
         padding: .6em .8em .5em 1.4em; 
+    }
+
+    .large {
+        width: 70%;
     }
 
 
