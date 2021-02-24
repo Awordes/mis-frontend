@@ -1,31 +1,46 @@
 <template>
   <div>
+    <b-container class="bv-example-row">
+
+        <b-row class="justify-content-md-center">
+            <b-form-select v-model="selectedEnterprise">
+                <b-form-select-option v-for="enterprise in enterprises" v-bind:value="enterprise.id" v-bind:key="enterprise.id">
+                    {{ enterprise.name }}
+                </b-form-select-option>
+            </b-form-select>
+        </b-row>
+
+        <b-row class="justify-content-md-center">
+            <b-col>
+                <b-form-select v-model="selectedType">
+                    <b-form-select-option v-for="type in types" v-bind:value="type.id" v-bind:key="type.id">
+                        {{ type.title }}
+                    </b-form-select-option>
+                </b-form-select>
+            </b-col>
+            <b-col>
+                <b-form-select v-model="selectedStatus">
+                    <b-form-select-option v-for="status in statuses" v-bind:value="status.id" v-bind:key="status.id">
+                        {{ status.title }}
+                    </b-form-select-option>
+                </b-form-select>
+            </b-col>
+            <b-col>
+                <b-form-select v-model="pageSize">
+                    <b-form-select-option v-for="size in pageSizes" v-bind:value="size.value" v-bind:key="size.value">
+                        {{ size.text }}
+                    </b-form-select-option>
+                </b-form-select>
+            </b-col>
+            <b-col>
+                <b-button variant="primary" class="submit" v-on:click="getVdsList">Получить список ВДС</b-button>
+            </b-col>
+        </b-row>
+    </b-container>
+
+    
 
     <div class="table">
-        
-        <div class="control">
-            <select class="select-css large" v-model="selectedEnterprise">
-                <option v-for="enterprise in enterprises" v-bind:value="enterprise.id" v-bind:key="enterprise.id">
-                    {{ enterprise.name }}
-                </option>
-            </select>
-            <div class="row">
-                <select class="select-css" v-model="selectedType">
-                    <option v-for="type in types" v-bind:value="type.id" v-bind:key="type.id">
-                        {{ type.title }}
-                    </option>
-                </select>
-                <select class="select-css" v-model="selectedStatus">
-                    <option v-for="status in statuses" v-bind:value="status.id" v-bind:key="status.id">
-                        {{ status.title }}
-                    </option>
-                </select>
-                <button class="submit" v-on:click="getVdsList">Получить список ВДС</button>
-            </div>
-
-
-            
-        </div>
         
         <div v-show="visible">
             
@@ -51,14 +66,11 @@
                 </tr>
             </table>
 
-            <div class="control">
+            <div class="text-center">
 
-            <select class="select-css" v-model="pageSize">
-                <option v-for="size in pageSizes" v-bind:value="size.value" v-bind:key="size.value">
-                    {{ size.text }}
-                </option>
-            </select>
-
+                <div class="mt-3">
+                    <b-pagination v-model="currentPage" :total-rows="elementCount" first-number last-number v-on:input="getVdsList"></b-pagination>
+                </div>
             </div>
 
         </div>
@@ -101,7 +113,10 @@ export default {
                 value: 100,
                 text: "Показывать по: 100"
             },
-        ]
+        ],
+        currentPage: 1,
+        pageCount: 3,
+        elementCount: 30,
         
     }
   },
@@ -112,7 +127,7 @@ export default {
             .get(this.$baseUrl + '/Vsd/GetVsdList', {
                 params: {
                     "pageSize": this.pageSize,
-                    "page" : 1,
+                    "page" : this.currentPage,
                     "status" : this.selectedStatus,
                     "type" : this.selectedType,
                     "enterpriseId": this.selectedEnterprise,
@@ -121,6 +136,8 @@ export default {
             .then((response) => {
                 console.log(response.data)
                 this.vdsList = response.data.result;
+                this.pageCount = response.data.pageCount;
+                this.elementCount = response.data.elementCount;
                 this.$loaderEnd()
             }, (error) => {
                 console.log(error);
@@ -168,7 +185,7 @@ export default {
 
 
 <style scoped>
-    .table {
+    /* .table {
         width: 100%;
         margin: 0 auto;
         margin-top: 60px;
@@ -204,7 +221,7 @@ export default {
         background: #F6F6f6;
         border-radius: 3px;
     }
-    .submit {
+    /* .submit {
         cursor: pointer;
         font-size: 16px; 
         font-family: sans-serif; 
@@ -231,7 +248,7 @@ export default {
     .submit:focus
     {
         outline:none;
-    }
+    } 
     .control {
         margin: 20px 0;
     }
@@ -276,7 +293,7 @@ export default {
 
     .large {
         width: 70%;
-    }
+    } */
 
 
 

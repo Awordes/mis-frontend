@@ -8,6 +8,13 @@ import VueAxios from 'vue-axios';
 import VueLoader from './loader';
 axios.defaults.withCredentials = true;
 
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
+
 Vue.use(VueAxios, axios);
 
 Vue.prototype.$baseUrl = process.env.VUE_APP_API_URL;
