@@ -23,10 +23,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  margin-top: 60px;
 }
 html {
-  background-image: url(./assets/bg-4.jpg);
+  background-color: rgb(236, 230, 193);
   width: 100%;
   height: 100%;
   background-attachment: fixed;
