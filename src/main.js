@@ -1,25 +1,27 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from '@/router'
 Vue.config.productionTip = false
 
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import VueLoader from './loader';
 axios.defaults.withCredentials = true;
+Vue.use(VueAxios, axios);
+
+import VueLoader from '@/tools/loader';
+Vue.prototype.$loaderStart = VueLoader.loaderStart;
+Vue.prototype.$loaderEnd = VueLoader.loaderEnd;
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
-Vue.use(VueAxios, axios);
+import Notification from '@/tools/notification';
+Vue.prototype.$createNotification = Notification.createNotification;
 
 Vue.prototype.$baseUrl = process.env.VUE_APP_API_URL;
-Vue.prototype.$loaderStart = VueLoader.loaderStart;
-Vue.prototype.$loaderEnd = VueLoader.loaderEnd;
 
 router.beforeResolve((to, from, next) => {
   if(to.path) {
@@ -27,7 +29,6 @@ router.beforeResolve((to, from, next) => {
   }
   next()
 });
-
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
@@ -46,10 +47,12 @@ router.beforeEach(async (to, from, next) => {
 
     VueLoader.loaderEnd();
       
-    if (loginCheck)
-      next();
-    else
+    if (loginCheck) next();
+    else {
+      Notification.createMainNotification('danger', 'Ошибка', 'Необходима авторизация');
+
       next({name: 'auth'});
+    }
   }   
   next()
 });

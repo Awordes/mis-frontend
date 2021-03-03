@@ -12,19 +12,18 @@
         <path fill-rule="evenodd" d="M10.646.646a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1 0 .708l-1.902 1.902-.829 3.313a1.5 1.5 0 0 1-1.024 1.073L1.254 14.746 4.358 4.4A1.5 1.5 0 0 1 5.43 3.377l3.313-.828L10.646.646zm-1.8 2.908l-3.173.793a.5.5 0 0 0-.358.342l-2.57 8.565 8.567-2.57a.5.5 0 0 0 .34-.357l.794-3.174-3.6-3.6z"/>
         <path fill-rule="evenodd" d="M2.832 13.228L8 9a1 1 0 1 0-1-1l-4.228 5.168-.026.086.086-.026z"/>
       </svg>
-      <input required v-model="password" type="password" placeholder="Пароль" />
+      <input required v-model="password" type="password" placeholder="Пароль" v-on:keyup.enter="onEnter" />
     </div>
 
-    <label hidden id="loginError"></label>
+    <div class="rememberMe">
+      <b-checkbox v-model="rememberMe">Запомнить</b-checkbox>
+    </div>
 
     <b-button v-on:click="login" type="submit" variant="outline-primary">Вход</b-button>
-    
   </div>
 </template>
 
-
 <script>
-
 import Vue from 'vue'
 
 export default {
@@ -32,28 +31,31 @@ export default {
   data() {
     return {
       username: this.username,
-      password: this.password
+      password: this.password,
+      rememberMe: this.rememberMe
     }
   },
   methods: {
     login: function () {
-      document.getElementById("loginError").hidden = true;
-      this.$loaderStart()
+      this.username ??= "";
       
-      Vue.axios
-      .post(this.$baseUrl + '/Auth/Login', {
+      this.$loaderStart();
+      Vue.axios.post(this.$baseUrl + '/Auth/Login', {
         "login": this.username,
         "password" : this.password,
-        "rememberMe" : true,
-      })
-      .then((response) => {
-        console.log(response.status);
-        this.$router.push("client");
-      }, (error) => {
-        this.$loaderEnd();
-        document.getElementById("loginError").hidden = false;
-        document.getElementById("loginError").textContent=error.response.data.error;
-      })
+        "rememberMe" : this.rememberMe,
+      }).then(() => {
+          this.$loaderEnd();
+          this.$router.push("client");
+        }, (error) => {
+          this.$loaderEnd();
+          console.log(error);
+          this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
+      });
+    },
+
+    onEnter: function() {
+      this.login();
     }
   }
 };
@@ -112,10 +114,6 @@ button {
   transition: box-shadow 0.4s ease;
 }
 
-#loginError {
-  color: red;
-}
-
 *::-webkit-input-placeholder {
   color: #666;
 }
@@ -130,5 +128,9 @@ button {
 
 *:-ms-input-placeholder {
   color: #666;
+}
+
+.rememberMe {
+  margin: 15px;
 }
 </style>

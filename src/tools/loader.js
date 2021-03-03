@@ -14,8 +14,8 @@ function loaderStart() {
     loader.isActive = true;
   }
   
-  function loaderEnd() {
-    loader.isActive = false;
-  }
+function loaderEnd() {
+  loader.isActive = false;
+}
 
 export default {loaderStart, loaderEnd}
