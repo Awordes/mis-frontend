@@ -1,33 +1,16 @@
 <template>
   <div>
-     <VdsList />
+     <VsdList />
   </div>
 </template>
 
 <script>
-import VdsList from "../components/VdsList";
-
-//import Vue from 'vue'
+import VsdList from "../components/VsdList";
 
 export default {
   name: "Client",
   components: {
-    VdsList,
+    VsdList,
   }
-  // beforeCreate: function() { 
-  //     Vue.axios
-  //     .get(this.$baseUrl + '/Auth/LoginCheck')
-  //     .then((response) => {
-  //       console.log(response.status);
-  //     }, () => {
-  //       this.$router.push("auth")
-  //     })
-  // }
 };
 </script>
-
-<style scoped>
-body {
-  background-color: transparent;
-}
-</style>

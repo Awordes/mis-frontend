@@ -13,9 +13,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-body {
-  background-color: transparent;
-}
-</style>
