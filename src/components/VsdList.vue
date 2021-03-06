@@ -40,31 +40,49 @@
         
         <b-container class="vsd-wr">
             <b-row>
-                <b-table striped selectable outlined hover
+                <b-table selectable outlined hover
                     :items="vsdList"
                     :fields="vsdFields"
                     :busy="isLoading"
                     :select-mode="selectMode"
                     ref="vsdListTable"
-                    >
+                    @row-selected="onRowSelected">
                     <template #table-busy>
                         <div class="text-center text-primary my-2">
                             <b-spinner class="align-middle"></b-spinner><br />
                             <strong>Подождите пожалуйста</strong>
                         </div>
                     </template>
-                    <template #cell(isChecked)="data">
-                        <input type="checkbox" v-model="data.item.selected" />
+                    <template #cell(productDate)="data">
+                        <span>{{ data.item.productDate | moment("MM.DD.YYYY") }}</span>
+                    </template>
+                    <template #cell(expirationDate)="data">
+                        <span>{{ data.item.expirationDate | moment("MM.DD.YYYY") }}</span>
                     </template>
                 </b-table>
             </b-row>
             <b-row>
                 <b-col>
-                    <b-pagination v-model="currentPage" :total-rows="elementCount" @change="getVsdList"></b-pagination>
+                    <b-pagination
+                        v-model="currentPage"
+                        :per-page="pageSize"
+                        :total-rows="rowCount"
+                        @change="getVsdList"
+                        align="left"
+                        last-number>
+                    </b-pagination>
                 </b-col>
                 <b-col>
-                    <b-button variant="outline-info" @click="selectAll">Выбрать всё</b-button>
-                    <b-button variant="outline-primary" @click="clearSelected">Очистить выделение</b-button>
+                    <b-button size="sm" variant="outline-info" @click="selectAll" style="margin: 5px;">Выбрать всё</b-button>
+                    <b-button size="sm" variant="outline-primary" @click="clearSelected" style="margin: 5px;">Очистить выделение</b-button>
+                </b-col>
+            </b-row>
+        </b-container>
+        
+        <b-container class="vsd-wr">
+            <b-row>                
+                <b-col>
+                    <b-button variant="success" class="submit" v-on:click="processVsdList(selectedRows)">Погасить выбранные ВСД</b-button>
                 </b-col>
             </b-row>
         </b-container>
@@ -82,174 +100,13 @@ export default {
         selectMode: 'multi',
         vsdFields:[
             {key: 'id', label: 'Идентификатор ВСД'},
-            {key: 'productGlobalId', label: 'Номер продукции'},
-            {key: 'name', label: 'Наименование'},
             {key: 'productDate', label: 'Дата выработки'},
             {key: 'expirationDate', label: 'Дата окончания срока годности'},
-            {key: 'volume', label: 'Объем'}
+            {key: 'name', label: 'Наименование'},
+            {key: 'volume', label: 'Объем'},            
+            {key: 'productGlobalId', label: 'Номер продукции'},
         ],
-        vsdList: [
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-            {
-                id: "aslkfnas",
-                productGlobalId: "asd",
-                name: "asd",
-                productDate: "asd",
-                expirationDate: "asd",
-                volume: "sad"
-            },
-        ],
+        vsdList: [],
         selectedRows:[],
         types: [],
         selectedType: Number,
@@ -257,8 +114,6 @@ export default {
         selectedStatus: Number,
         enterprises: [],
         selectedEnterprise: Number,
-        count: 10,
-        pageSize: 10,
         pageSizes: [
             {
                 value: 10,
@@ -277,9 +132,11 @@ export default {
                 text: "Показывать по: 100"
             },
         ],
-        currentPage: 1,
-        pageCount: 4,
-        elementCount: 400,
+        pageSize: 10,
+        currentPage: null,
+        pageCount: 0,
+        rowCount: 0,
+        perPage: 3
     }
   },
     methods: {
@@ -298,18 +155,41 @@ export default {
                 this.isLoading = false;
                 this.vsdList = response.data.result;
                 this.pageCount = response.data.pageCount;
-                this.elementCount = response.data.elementCount;
+                this.rowCount = response.data.elementCount;
+                console.log(this.rowCount);
             }, (error) => {
                 console.log(error);
                 this.isLoading = false;
                 this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
             })
         },
+
         selectAll: function() {
             this.$refs.vsdListTable.selectAllRows();
         },
+
         clearSelected() {
             this.$refs.vsdListTable.clearSelected();
+        },
+        
+        onRowSelected(items) {
+            this.selectedRows = items.map(item => item.id);
+        },
+
+        processVsdList(uuids) {
+            this.$loaderStart();
+            Vue.axios.post(this.$baseUrl + '/Vsd/ProcessVsdList', {
+                "enterpriseId": this.selectedEnterprise,
+                "uuids": uuids
+            })
+            .then(() => {
+                this.$loaderEnd();
+                this.$createNotification('success', 'ВСД успешно погашены', ' ');
+            }, (error) => {
+                console.log(error);
+                this.$loaderEnd();
+                this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
+            })
         }
     },
     mounted: function() {
@@ -354,8 +234,8 @@ export default {
   position: relative;
   display: inline-block;
   background-color: white;
-  margin-top: 80px;
-  margin-bottom: 80px;
+  margin-top: 40px;
+  margin-bottom: 20px;
   left: 1px;
   right: 1px;
   text-align: center;

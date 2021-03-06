@@ -23,6 +23,8 @@ Vue.prototype.$createNotification = Notification.createNotification;
 
 Vue.prototype.$baseUrl = process.env.VUE_APP_API_URL;
 
+Vue.use(require('vue-moment'));
+
 router.beforeResolve((to, from, next) => {
   if(to.path) {
     VueLoader.loaderStart()

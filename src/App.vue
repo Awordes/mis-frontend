@@ -25,7 +25,7 @@ export default {
   text-align: center;
 }
 html {
-  background-color: rgb(148, 139, 81);
+  background-color: rgb(224, 223, 222);
   width: 100%;
   height: 100%;
   background-attachment: fixed;

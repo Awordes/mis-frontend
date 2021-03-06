@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="info">
+    <b-navbar toggleable="lg" type="dark" class="nav-bar">
       <b-navbar-brand href="/#/auth">MIS</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -33,3 +33,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.nav-bar {
+  background-color: rgb(67, 100, 161);  
+  box-shadow: 0 0 10px #333;
+}
+</style>
