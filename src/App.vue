@@ -8,7 +8,7 @@
 </template>
 <script>
 
-import Nav from "./components/partials/Nav.vue";
+import Nav from "./components/Nav.vue";
 export default {
   name: "app",
   components: {

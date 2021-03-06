@@ -6,7 +6,8 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="/#/client">Список ВСД</b-nav-item>
+          <b-nav-item href="/#/vsd">Администрирование</b-nav-item>
+          <b-nav-item href="/#/vsd">Список ВСД</b-nav-item>
           <b-nav-item href="#" v-on:click="logout">Выход</b-nav-item>
         </b-navbar-nav>
       </b-collapse>

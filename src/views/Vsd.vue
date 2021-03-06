@@ -8,7 +8,7 @@
 import VsdList from "../components/VsdList";
 
 export default {
-  name: "Client",
+  name: "vsd",
   components: {
     VsdList,
   }

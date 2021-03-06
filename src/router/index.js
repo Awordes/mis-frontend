@@ -18,9 +18,9 @@ export default new Router({
             meta: { requiresAuth: true }
         },
         {
-            path: '/client',
-            name: 'client',
-            component: () => import('../views/Client.vue'),
+            path: '/Vsd',
+            name: 'vsd',
+            component: () => import('../views/Vsd.vue'),
             meta: { requiresAuth: true }
         },
         {

@@ -46,7 +46,7 @@ export default {
         "rememberMe" : this.rememberMe,
       }).then(() => {
           this.$loaderEnd();
-          this.$router.push("client");
+          this.$router.push("vsd");
         }, (error) => {
           this.$loaderEnd();
           console.log(error);

@@ -82,7 +82,9 @@
         <b-container class="vsd-wr">
             <b-row>                
                 <b-col>
-                    <b-button variant="success" class="submit" v-on:click="processVsdList(selectedRows)">Погасить выбранные ВСД</b-button>
+                    <b-button variant="success" class="submit" 
+                        v-on:click="processVsdList(selectedRows)" 
+                        :disabled="selectedRows.length < 1">Погасить выбранные ВСД</b-button>
                 </b-col>
             </b-row>
         </b-container>
@@ -109,11 +111,11 @@ export default {
         vsdList: [],
         selectedRows:[],
         types: [],
-        selectedType: Number,
+        selectedType: null,
         statuses: [],
-        selectedStatus: Number,
+        selectedStatus: null,
         enterprises: [],
-        selectedEnterprise: Number,
+        selectedEnterprise: null,
         pageSizes: [
             {
                 value: 10,
