@@ -7,7 +7,7 @@ Vue.use(Loading);
 let loader = Vue.$loading.show({
     loader: 'dots',
     color: '#5D00FF',
-    zIndex: 999,
+    zIndex: 1051,
 }); 
 
 function loaderStart() {
