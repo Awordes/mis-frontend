@@ -50,7 +50,7 @@
                 </b-col>
             </b-row>
             <b-row>
-                <b-col>
+                <b-col cols="9">
                     <b-pagination
                         v-model="userListCurrentPage"
                         :per-page="userListPageSize"
@@ -59,6 +59,12 @@
                         align="left"
                         last-number>
                     </b-pagination>
+                </b-col>
+                <b-col cols="3">                    
+                    <b-button v-b-modal.user-create v-b-tooltip.hover size="sm" variant="primary"
+                        @click="openUserCreate()">
+                        Создать пользователя
+                    </b-button>
                 </b-col>
             </b-row>
         </b-container>
@@ -100,6 +106,64 @@
                         :type="field.type" 
                         v-model="selectedUser[field.key]"
                         :disabled="!disableForm"
+                        ></b-form-input>
+                    </b-col>
+                </b-row>
+            </b-container>
+        </b-modal>
+
+        <b-modal
+            id="user-create"
+            size="lg"
+            scrollable 
+            title="Создание пользователя"
+            @ok="userCreateModal"
+            @show="showModal"
+            :no-enforce-focus="true"
+            >
+            <template #modal-footer="{ ok, cancel}">
+                <b-button size="sm" variant="success" @click="ok()">Создать</b-button>
+                <b-button size="sm" variant="danger" @click="cancel()">Назад</b-button>
+            </template>
+            <b-container fluid>
+                <b-row class="modal-field">
+                    <b-col sm="3">
+                        <label>Логин</label>
+                    </b-col>
+                    <b-col sm="9">
+                        <b-form-input
+                        type="text" 
+                        v-model="selectedUser['userName']"
+                        ></b-form-input>
+                    </b-col>
+                </b-row>
+                <b-row class="modal-field">
+                    
+                    <b-col sm="3">
+                        <label>Пароль</label>
+                    </b-col>
+                    <b-col sm="9">
+                        <b-input-group>
+                            <b-form-input 
+                                type="text" 
+                                v-model="selectedUser['password']"></b-form-input>
+                            <b-input-group-append>
+                                <b-button v-b-tooltip.hover title="Сгенерировать пароль" variant="outline-success" @click="generatePassword">
+                                    <b-icon icon="arrow-repeat"></b-icon>
+                                </b-button>
+                            </b-input-group-append>
+                        </b-input-group>
+                    </b-col>
+                </b-row>
+                <b-row class="modal-field" v-for="field in userEditModalFields" :key="field.key">
+                    <b-col sm="3">
+                        <label>{{ field.label }}</label>
+                    </b-col>
+                    <b-col sm="9">
+                        <b-form-input 
+                        size="sm"
+                        :type="field.type" 
+                        v-model="selectedUser[field.key]"
                         ></b-form-input>
                     </b-col>
                 </b-row>
@@ -395,10 +459,25 @@ export default {
         },
         updateUser() {
             this.$loaderStart();
+            console.log(this.selectedUser);
             Vue.axios.put(this.$baseUrl + '/User/' + this.selectedUser.id, this.selectedUser)
             .then(() => {
                 this.$loaderEnd();
                 this.$createNotification('success', 'Успешно', 'Пользователь ' + this.selectedUser.title + ' успешно обновлён.');
+                this.refreshUserList();
+            }, (error) => {
+                this.$loaderEnd();
+                console.log(error);
+                this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
+            })
+        },
+        createUser() {
+            this.$loaderStart();
+            console.log(this.selectedUser);
+            Vue.axios.post(this.$baseUrl + '/User', this.selectedUser)
+            .then(() => {
+                this.$loaderEnd();
+                this.$createNotification('success', 'Успешно', 'Пользователь успешно создан.');
                 this.refreshUserList();
             }, (error) => {
                 this.$loaderEnd();
@@ -566,6 +645,13 @@ export default {
         },
         changePasswordModal() {
             this.changeUserPassword(this.selectedUserId, this.newPassword);
+        },
+        openUserCreate() {
+            this.selectedUser = {};
+            this.selectedUserId = '';
+        },
+        userCreateModal() {
+            this.createUser();
         }
     },
     mounted() {
