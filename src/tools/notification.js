@@ -12,7 +12,7 @@ function createNotification(variant, title, message) {
 function createMainNotification(variant, title, message) {  
   (new BToast()).$bvToast.toast(message, {
     title: title,
-    autoHideDelay: 5000,
+    autoHideDelay: 10000,
     solid: true,
     variant: variant
   });

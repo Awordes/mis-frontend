@@ -12,16 +12,38 @@ export default new Router({
             component: () => import('../views/Auth.vue'),
         },
         {
+            path: '/main',
+            name: 'main',
+            component: () => import('../views/Main.vue'),
+            meta: {
+                requiresAuth: true,
+                roles: [
+                    'admin',
+                    'client'
+                ]
+            }
+        },
+        {
             path: '/admin',
             name: 'admin',
             component: () => import('../views/Admin.vue'),
-            meta: { requiresAuth: true }
+            meta: {
+                requiresAuth: true,
+                roles: [
+                    'admin'
+                ]
+            }
         },
         {
-            path: '/Vsd',
+            path: '/vsd',
             name: 'vsd',
             component: () => import('../views/Vsd.vue'),
-            meta: { requiresAuth: true }
+            meta: {
+                requiresAuth: true,
+                roles: [
+                    'client'
+                ]
+            }
         },
         {
             path: '/app',

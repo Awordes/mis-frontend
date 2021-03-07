@@ -40,26 +40,28 @@
         
         <b-container class="vsd-wr">
             <b-row>
-                <b-table selectable outlined hover
-                    :items="vsdList"
-                    :fields="vsdFields"
-                    :busy="isLoading"
-                    :select-mode="selectMode"
-                    ref="vsdListTable"
-                    @row-selected="onRowSelected">
-                    <template #table-busy>
-                        <div class="text-center text-primary my-2">
-                            <b-spinner class="align-middle"></b-spinner><br />
-                            <strong>Подождите пожалуйста</strong>
-                        </div>
-                    </template>
-                    <template #cell(productDate)="data">
-                        <span>{{ data.item.productDate | moment("MM.DD.YYYY") }}</span>
-                    </template>
-                    <template #cell(expirationDate)="data">
-                        <span>{{ data.item.expirationDate | moment("MM.DD.YYYY") }}</span>
-                    </template>
-                </b-table>
+                <b-col>
+                    <b-table selectable outlined hover responsive
+                        :items="vsdList"
+                        :fields="vsdFields"
+                        :busy="isLoading"
+                        :select-mode="selectMode"
+                        ref="vsdListTable"
+                        @row-selected="onRowSelected">
+                        <template #table-busy>
+                            <div class="text-center text-primary my-2">
+                                <b-spinner class="align-middle"></b-spinner><br />
+                                <strong>Подождите пожалуйста</strong>
+                            </div>
+                        </template>
+                        <template #cell(productDate)="data">
+                            <span>{{ data.item.productDate | moment("MM.DD.YYYY") }}</span>
+                        </template>
+                        <template #cell(expirationDate)="data">
+                            <span>{{ data.item.expirationDate | moment("MM.DD.YYYY") }}</span>
+                        </template>
+                    </b-table>
+                </b-col>
             </b-row>
             <b-row>
                 <b-col>
@@ -92,55 +94,52 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from 'vue';
 
 export default {
-  name: "VsdList",
-  data() {
-    return {
-        isLoading: false,
-        selectMode: 'multi',
-        vsdFields:[
-            {key: 'id', label: 'Идентификатор ВСД'},
-            {key: 'productDate', label: 'Дата выработки'},
-            {key: 'expirationDate', label: 'Дата окончания срока годности'},
-            {key: 'name', label: 'Наименование'},
-            {key: 'volume', label: 'Объем'},            
-            {key: 'productGlobalId', label: 'Номер продукции'},
-        ],
-        vsdList: [],
-        selectedRows:[],
-        types: [],
-        selectedType: null,
-        statuses: [],
-        selectedStatus: null,
-        enterprises: [],
-        selectedEnterprise: null,
-        pageSizes: [
-            {
-                value: 10,
-                text: "Показывать по: 10"
-            },
-            {
-                value: 20,
-                text: "Показывать по: 20"
-            },
-            {
-                value: 50,
-                text: "Показывать по: 50"
-            },
-            {
-                value: 100,
-                text: "Показывать по: 100"
-            },
-        ],
-        pageSize: 10,
-        currentPage: null,
-        pageCount: 0,
-        rowCount: 0,
-        perPage: 3
-    }
-  },
+    name: "VsdList",
+    data() {
+        return {
+            isLoading: false,
+            selectMode: 'multi',
+            vsdFields:[
+                {key: 'id', label: 'Идентификатор ВСД'},
+                {key: 'productDate', label: 'Дата выработки'},
+                {key: 'expirationDate', label: 'Дата окончания срока годности'},
+                {key: 'name', label: 'Наименование'},
+                {key: 'volume', label: 'Объем'},            
+                {key: 'productGlobalId', label: 'Номер продукции'},
+            ],
+            vsdList: [],
+            selectedRows:[],
+            types: [],
+            selectedType: null,
+            statuses: [],
+            selectedStatus: null,
+            enterprises: [],
+            selectedEnterprise: null,
+            pageSizes: [
+                {
+                    value: 10,
+                    text: "Показывать по: 10"
+                }, {
+                    value: 20,
+                    text: "Показывать по: 20"
+                }, {
+                    value: 50,
+                    text: "Показывать по: 50"
+                }, {
+                    value: 100,
+                    text: "Показывать по: 100"
+                }
+            ],
+            pageSize: 10,
+            currentPage: null,
+            pageCount: 0,
+            rowCount: 0,
+            perPage: 3
+        }
+    },
     methods: {
         getVsdList: function(currentPage) {
             this.isLoading = true;
@@ -158,7 +157,6 @@ export default {
                 this.vsdList = response.data.result;
                 this.pageCount = response.data.pageCount;
                 this.rowCount = response.data.elementCount;
-                console.log(this.rowCount);
             }, (error) => {
                 console.log(error);
                 this.isLoading = false;
@@ -229,18 +227,16 @@ export default {
 <style scoped>
 .vsd-list {
     position: absolute;
+    left: 1%;
+    right: 1%;
 }
 
 .vsd-wr {
-  box-shadow: 3px 3px 10px #333;
-  position: relative;
-  display: inline-block;
-  background-color: white;
-  margin-top: 40px;
-  margin-bottom: 20px;
-  left: 1px;
-  right: 1px;
-  text-align: center;
-  padding: 15px;
+    box-shadow: 3px 3px 10px #333;
+    position: relative;
+    background-color: white;
+    margin-top: 40px;
+    margin-bottom: 20px;    
+    padding: 15px;
 }
 </style>

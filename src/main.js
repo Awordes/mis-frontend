@@ -25,6 +25,19 @@ Vue.prototype.$baseUrl = process.env.VUE_APP_API_URL;
 
 Vue.use(require('vue-moment'));
 
+import Vuex from 'vuex';
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+  state () {
+    return {
+      userTitle: '',
+      roles: []
+    }
+  }
+});
+Vue.use(store);
+
 router.beforeResolve((to, from, next) => {
   if(to.path) {
     VueLoader.loaderStart()
@@ -34,22 +47,32 @@ router.beforeResolve((to, from, next) => {
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
-
     VueLoader.loaderStart();
+
+    var haveAccess = false;
     
     var loginCheck = await (new Promise((resolve) => {
-          Vue.axios
-        .get(Vue.prototype.$baseUrl + '/Auth/LoginCheck')
-        .then(() => {
-          resolve(true);
-        }, () => {
-          resolve(false);
-        })
-      }));
+      Vue.axios.get(Vue.prototype.$baseUrl + '/User/Current')
+      .then((response) => {
+        store.state.roles = response.data.roles;
+        store.state.userTitle = response.data.title;
+        haveAccess = response.data.roles.some(x => to.meta.roles.includes(x));
+        resolve(true);
+      }, () => {
+        resolve(false);
+      })
+    }));
 
     VueLoader.loaderEnd();
       
-    if (loginCheck) next();
+    if (loginCheck){
+      if (haveAccess)
+        next();
+      else {
+        Notification.createMainNotification('danger', 'Ошибка', 'Недостаточно прав');
+        next(from);
+      }
+    }
     else {
       Notification.createMainNotification('danger', 'Ошибка', 'Необходима авторизация');
 
@@ -67,6 +90,7 @@ router.afterEach(() => {
 });
 
 new Vue({
+  store: store,
   router,
   VueLoader,
   methods: {
