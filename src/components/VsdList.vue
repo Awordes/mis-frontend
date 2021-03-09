@@ -55,10 +55,10 @@
                             </div>
                         </template>
                         <template #cell(productDate)="data">
-                            <span>{{ data.item.productDate | moment("MM.DD.YYYY") }}</span>
+                            <span>{{ data.item.productDate | moment("DD.MM.YYYY") }}</span>
                         </template>
                         <template #cell(expirationDate)="data">
-                            <span>{{ data.item.expirationDate | moment("MM.DD.YYYY") }}</span>
+                            <span>{{ data.item.expirationDate | moment("DD.MM.YYYY") }}</span>
                         </template>
                     </b-table>
                 </b-col>
@@ -96,10 +96,10 @@
                         :fields="vsdProcessTransactionFields"
                         ref="vsdProcessTransactionListTable">
                         <template #cell(startTime)="data">
-                            <span>{{ data.item.startTime | moment("MM.DD.YYYY hh:mm:ss") }}</span>
+                            <span>{{ data.item.startTime | moment("DD.MM.YYYY hh:mm:ss") }}</span>
                         </template>
                         <template #cell(finishTime)="data">
-                            <span>{{ data.item.finishTime | moment("MM.DD.YYYY hh:mm:ss") }}</span>
+                            <span>{{ data.item.finishTime | moment("DD.MM.YYYY hh:mm:ss") }}</span>
                         </template>
                         <template #cell(error)="data">
                             <span class="nowrap">{{data.item.error}}</span>

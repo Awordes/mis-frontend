@@ -15,7 +15,7 @@
                             </div>
                         </template>
                         <template #cell(expirationDate)="data">
-                            <span>{{ data.item.expirationDate | moment("MM.DD.YYYY") }}</span>
+                            <span>{{ data.item.expirationDate | moment("DD.MM.YYYY") }}</span>
                         </template>
                         <template #cell(action)="data">
                             <b-row cols="4">
