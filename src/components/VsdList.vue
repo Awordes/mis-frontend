@@ -231,7 +231,8 @@ export default {
                 this.$createNotification('success', 'ВСД успешно погашены', ' ');
             }, (error) => {
                 console.log(error);
-                clearInterval();
+                clearInterval(this.interval);
+                this.getVsdProcessTransactionList(1);
                 this.vsdProcessingInProgress = false;
                 this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
             })
