@@ -96,10 +96,10 @@
                         :fields="vsdProcessTransactionFields"
                         ref="vsdProcessTransactionListTable">
                         <template #cell(startTime)="data">
-                            <span>{{ data.item.startTime | moment("DD.MM.YYYY hh:mm:ss") }}</span>
+                            <span>{{ data.item.startTime | moment("DD.MM.YYYY HH:mm:ss") }}</span>
                         </template>
                         <template #cell(finishTime)="data">
-                            <span>{{ data.item.finishTime | moment("DD.MM.YYYY hh:mm:ss") }}</span>
+                            <span>{{ data.item.finishTime | moment("DD.MM.YYYY HH:mm:ss") }}</span>
                         </template>
                         <template #cell(error)="data">
                             <span class="nowrap">{{data.item.error}}</span>
