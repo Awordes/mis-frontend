@@ -91,34 +91,41 @@
         <b-container class="vsd-wr">
             <b-row>
                 <b-col>
-                    <b-table class="vsd-log" outlined hover responsive
-                        :items="vsdProcessTransactionList"
-                        :fields="vsdProcessTransactionFields"
-                        ref="vsdProcessTransactionListTable">
-                        <template #cell(startTime)="data">
-                            <span>{{ data.item.startTime | moment("DD.MM.YYYY HH:mm:ss") }}</span>
-                        </template>
-                        <template #cell(finishTime)="data">
-                            <span>{{ data.item.finishTime | moment("DD.MM.YYYY HH:mm:ss") }}</span>
-                        </template>
-                        <template #cell(error)="data">
-                            <span class="nowrap">{{data.item.error}}</span>
-                        </template>
-                    </b-table>
+                    <b-button v-b-toggle.collapse-log variant="primary" class="collapse-log-btn">Лог гашения</b-button>
                 </b-col>
             </b-row>
-            <b-row>                
-                <b-col>
-                    <b-pagination
-                        v-model="vsdProcessTransactionCurrentPage"
-                        :per-page="vsdProcessTransactionPageSize"
-                        :total-rows="vsdProcessTransactionRowCount"
-                        @change="getVsdProcessTransactionList"
-                        align="left"
-                        last-number>
-                    </b-pagination>
-                </b-col>
-            </b-row>
+            <b-collapse id="collapse-log">
+                <b-row>
+                    <b-col>
+                        <b-table class="vsd-log" outlined hover responsive
+                            :items="vsdProcessTransactionList"
+                            :fields="vsdProcessTransactionFields"
+                            ref="vsdProcessTransactionListTable">
+                            <template #cell(startTime)="data">
+                                <span>{{ data.item.startTime | moment("DD.MM.YYYY HH:mm:ss") }}</span>
+                            </template>
+                            <template #cell(finishTime)="data">
+                                <span>{{ data.item.finishTime | moment("DD.MM.YYYY HH:mm:ss") }}</span>
+                            </template>
+                            <template #cell(error)="data">
+                                <span class="nowrap">{{data.item.error}}</span>
+                            </template>
+                        </b-table>
+                    </b-col>
+                </b-row>
+                <b-row>                
+                    <b-col>
+                        <b-pagination
+                            v-model="vsdProcessTransactionCurrentPage"
+                            :per-page="vsdProcessTransactionPageSize"
+                            :total-rows="vsdProcessTransactionRowCount"
+                            @change="getVsdProcessTransactionList"
+                            align="left"
+                            last-number>
+                        </b-pagination>
+                    </b-col>
+                </b-row>
+            </b-collapse>
         </b-container>
     </div>
 </template>
@@ -305,5 +312,9 @@ export default {
 
 .vsd-log {
     font-size: 80%;
+}
+
+.collapse-log-btn {
+    margin-bottom: 10px;
 }
 </style>
