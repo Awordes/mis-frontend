@@ -1,5 +1,57 @@
 <template>
     <div class="admin-panel">
+        <b-container class="admin-panel-wr">
+            <b-row class="d-flex flex-row p-2">
+                <b-col sm="4">
+                    <label>Кол-во элементов страницы:</label>
+                </b-col>
+                <b-col sm="2">
+                    <b-form-input type="number" placeholder="" min="0" v-model="userListPageSize"></b-form-input>
+                </b-col>
+            </b-row>
+            <b-row class="d-flex flex-row p-2">
+                <b-col sm="4">
+                    <label>Логин:</label>
+                </b-col>
+                <b-col sm="6">
+                    <b-form-input type="search" v-model="userListLoginFilter"></b-form-input>
+                </b-col>
+            </b-row>
+            <b-row class="d-flex flex-row p-2">
+                <b-col sm="4">
+                    <label>ИНН:</label>
+                </b-col>
+                <b-col sm="4">
+                    <b-form-input type="search" v-model="userListInnFilter"></b-form-input>
+                </b-col>
+            </b-row>
+            <b-row class="d-flex flex-row p-2">
+                <b-col sm="4">
+                    <label>Дата окончания подписки:</label>
+                </b-col>
+                <b-col sm="1">
+                    <label>C:</label>
+                </b-col>
+                <b-col sm="3">
+                    <b-form-input type="date" v-model="userListExpirationDateStartFilter"></b-form-input>
+                </b-col>
+                <b-col sm="1">
+                    <label>По:</label>
+                </b-col>
+                <b-col sm="3">
+                    <b-form-input type="date" v-model="userListExpirationDateEndFilter"></b-form-input>
+                </b-col>
+            </b-row>
+            <b-row class="d-flex flex-row p-2">
+                <b-col>
+                    <b-button variant="primary" class="submit" v-on:click="getUserList(1)">Применить фильтр</b-button>
+                </b-col>
+                <b-col>
+                    <b-button variant="outline-primary" class="submit" v-on:click="clearFilter">Очистить</b-button>
+                </b-col>
+            </b-row>
+        </b-container>
+
         <b-container class="admin-panel-wr">            
             <b-row>
                 <b-col>
@@ -18,7 +70,7 @@
                             <span>{{ data.item.expirationDate | moment("DD.MM.YYYY") }}</span>
                         </template>
                         <template #cell(action)="data">
-                            <b-row cols="4">
+                            <b-row cols="5">
                                 <b-col>
                                     <b-button v-b-modal.user-edit v-b-tooltip.hover size="sm"
                                         title="Редактировать пользователя" @click="openUserEdit(data.item.id)">
@@ -42,6 +94,14 @@
                                         @click="openPasswordChange(data.item.id)"
                                         title="Изменить пароль">
                                         <b-icon icon="vector-pen"></b-icon>
+                                    </b-button>
+                                </b-col>
+                                <b-col>
+                                    <b-button v-b-modal.user-delete v-b-tooltip.hover size="sm"
+                                        @click="openDeleteUser(data.item.id)"
+                                        title="Удалить пользователя"
+                                        variant="danger">
+                                        <b-icon icon="trash"></b-icon>
                                     </b-button>
                                 </b-col>
                             </b-row>
@@ -155,7 +215,7 @@
                         </b-input-group>
                     </b-col>
                 </b-row>
-                <b-row class="modal-field" v-for="field in userEditModalFields" :key="field.key">
+                <b-row class="modal-field" v-for="field in userEditModalFields.slice(2,userEditModalFields.length)" :key="field.key">
                     <b-col sm="3">
                         <label>{{ field.label }}</label>
                     </b-col>
@@ -331,6 +391,18 @@
                     </b-input-group-append>
                 </b-input-group>
         </b-modal>
+
+        <b-modal
+            id="user-delete"
+            @ok="deleteUserModalClick"
+            title="Удаление пользователя"
+            :no-enforce-focus="true">
+            <template #modal-footer="{ ok, cancel}">
+                <b-button size="sm" variant="danger" @click="ok()">Удалить</b-button>
+                <b-button size="sm" variant="primary" @click="cancel()">Отмена</b-button>
+            </template>
+            Вы точно хотите удалить пользователя?
+        </b-modal>
     </div>
 </template>
 
@@ -343,25 +415,36 @@ export default {
         return {
             userListIsLoading: false,
             userListFields:[
-                {key: 'id', label: 'Идентификатор'},
                 {key: 'userName', label: 'Логин'},
                 {key: 'title', label: 'Имя пользователя'},
                 {key: 'expirationDate', label: 'Дата окончания подписки', thStyle: {width: '130px'}},
-                {key: 'action', label: 'Действия'}
+                {key: 'action', label: 'Действия', thStyle: {width: '280px'}}
             ],
             userList: [],
             userListPageSize: 10,
             userListCurrentPage: 1,
             userListRowCount: 1,
+            userListLoginFilter: null,
+            userListInnFilter: null,
+            userListExpirationDateStartFilter: null,
+            userListExpirationDateEndFilter: null,
             userEditModalFields: [
                 {
                     key: 'title',
                     type: 'text',
                     label: 'Имя пользователя'
                 }, {
+                    key: 'passwordText',
+                    type: 'text',
+                    label: 'Пароль'
+                }, {
                     key: 'inn',
                     type: 'text',
                     label: 'ИНН'
+                }, {
+                    key: 'phoneNumber',
+                    type: 'text',
+                    label: 'Номер телефона'
                 }, {
                     key: 'mercuryLogin',
                     type: 'text',
@@ -425,7 +508,11 @@ export default {
             Vue.axios.get(this.$baseUrl + '/User/List', {
                 params: {
                     "pageSize": this.userListPageSize,
-                    "page" : currentPage
+                    "page" : currentPage,
+                    "Inn": this.userListInnFilter,
+                    "Login": this.userListLoginFilter,
+                    "expirationDateStart": this.userListExpirationDateStartFilter,
+                    "expirationDateEnd": this.userListExpirationDateEndFilter
                 }
             })
             .then((response) => {
@@ -590,6 +677,19 @@ export default {
                 this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
             })
         },
+        deleteUserModalClick() {
+            this.$loaderStart();
+            Vue.axios.delete(this.$baseUrl + '/User/' + this.selectedUserId)
+            .then(() => {
+                this.$loaderEnd();
+                this.$createNotification('success', 'Успешно', 'Пользователь успешно удалён.');
+                this.refreshUserList();
+            }, (error) => {
+                this.$loaderEnd();
+                console.log(error);
+                this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
+            })
+        },
         openUserEdit(userId) {
             this.getUser(userId);
         },
@@ -647,6 +747,9 @@ export default {
         openPasswordChange(userId) {
             this.selectedUserId = userId;
         },
+        openDeleteUser(userId) {
+            this.selectedUserId = userId;
+        },
         changePasswordModal() {
             this.changeUserPassword(this.selectedUserId, this.newPassword);
         },
@@ -656,6 +759,12 @@ export default {
         },
         userCreateModal() {
             this.createUser();
+        },
+        clearFilter() {
+            this.userListInnFilter = null;
+            this.userListLoginFilter = null;
+            this.userListExpirationDateStartFilter = null;
+            this.userListExpirationDateEndFilter = null;
         }
     },
     mounted() {
