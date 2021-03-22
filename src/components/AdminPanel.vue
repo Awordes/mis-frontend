@@ -148,7 +148,7 @@
                                 type="text" 
                                 v-model="selectedUser['password']"></b-form-input>
                             <b-input-group-append>
-                                <b-button v-b-tooltip.hover title="Сгенерировать пароль" variant="outline-success" @click="generatePassword">
+                                <b-button v-b-tooltip.hover title="Сгенерировать пароль" variant="outline-success" @click="generateNewUserPassword">
                                     <b-icon icon="arrow-repeat"></b-icon>
                                 </b-button>
                             </b-input-group-append>
@@ -635,6 +635,10 @@ export default {
                 password += charSet.charAt(Math.floor(Math.random() * charSet.length));
             }
             this.newPassword = password;
+        },
+        generateNewUserPassword() {
+            this.generatePassword();
+            this.selectedUser['password'] = this.newPassword;
         },
         changePasswordClose() {
             this.newPassword = '';
