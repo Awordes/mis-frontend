@@ -9,10 +9,10 @@ export default new Router({
         {
             path: '/auth',
             name: 'auth',
-            component: () => import('../views/Auth.vue'),
+            component: () => import('../views/Auth.vue')
         },
         {
-            path: '/main',
+            path: '/',
             name: 'main',
             component: () => import('../views/Main.vue'),
             meta: {
