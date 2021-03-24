@@ -5,6 +5,8 @@
                 <b-col sm="4">
                     <label>Кол-во элементов страницы:</label>
                 </b-col>
+                <b-col sm="1">
+                </b-col>
                 <b-col sm="2">
                     <b-form-input type="number" placeholder="" min="0" v-model="userListPageSize"></b-form-input>
                 </b-col>
@@ -13,7 +15,7 @@
                 <b-col sm="4">
                     <label>Логин:</label>
                 </b-col>
-                <b-col sm="6">
+                <b-col sm="3">
                     <b-form-input type="search" v-model="userListLoginFilter"></b-form-input>
                 </b-col>
             </b-row>
@@ -21,7 +23,7 @@
                 <b-col sm="4">
                     <label>ИНН:</label>
                 </b-col>
-                <b-col sm="4">
+                <b-col sm="3">
                     <b-form-input type="search" v-model="userListInnFilter"></b-form-input>
                 </b-col>
             </b-row>
@@ -32,14 +34,39 @@
                 <b-col sm="1">
                     <label>C:</label>
                 </b-col>
-                <b-col sm="3">
+                <b-col sm="2">
                     <b-form-input type="date" v-model="userListExpirationDateStartFilter"></b-form-input>
                 </b-col>
                 <b-col sm="1">
                     <label>По:</label>
                 </b-col>
-                <b-col sm="3">
+                <b-col sm="2">
                     <b-form-input type="date" v-model="userListExpirationDateEndFilter"></b-form-input>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col sm="4">
+                    <label>Сортировать по:</label>
+                </b-col>
+                <b-col sm="3">
+                    <b-form-select v-model="selectedOrderField">
+                        <b-form-select-option v-for="field in userListFields.slice(0,userListFields.length - 1)" v-bind:value="field.key" v-bind:key="field.key">
+                            {{ field.label }}
+                        </b-form-select-option>
+                    </b-form-select>
+                </b-col>
+                <b-col sm="5">
+                        <b-form-group v-slot="{ ariaDescribedby }">
+                            <b-form-radio-group
+                                id="sortBy"
+                                v-model="sortType"
+                                :options="sortingTypes"
+                                :aria-describedby="ariaDescribedby"
+                                button-variant="outline-secondary"
+                                name="radio-btn-outline"
+                                buttons>
+                            </b-form-radio-group>
+                        </b-form-group>
                 </b-col>
             </b-row>
             <b-row class="d-flex flex-row p-2">
@@ -152,6 +179,18 @@
                         <b-form-input
                         type="text" 
                         v-model="selectedUser['userName']"
+                        disabled
+                        ></b-form-input>
+                    </b-col>
+                </b-row>
+                <b-row class="modal-field">
+                    <b-col sm="3">
+                        <label>Пароль</label>
+                    </b-col>
+                    <b-col sm="9">
+                        <b-form-input
+                        type="text" 
+                        v-model="selectedUser['passwordText']"
                         disabled
                         ></b-form-input>
                     </b-col>
@@ -434,10 +473,6 @@ export default {
                     type: 'text',
                     label: 'Имя пользователя'
                 }, {
-                    key: 'passwordText',
-                    type: 'text',
-                    label: 'Пароль'
-                }, {
                     key: 'inn',
                     type: 'text',
                     label: 'ИНН'
@@ -499,7 +534,13 @@ export default {
             ],
             selectedEnterpriseId: "",
             selectedEnterprise: {},
-            newPassword: ''
+            newPassword: '',
+            sortingTypes: [
+                { text: 'По возврастанию', value: 'asc' },
+                { text: 'По убыванию', value: 'desc' }
+            ],
+            sortType: null,
+            selectedOrderField: null
         }
     },
     methods: {
@@ -512,7 +553,9 @@ export default {
                     "Inn": this.userListInnFilter,
                     "Login": this.userListLoginFilter,
                     "expirationDateStart": this.userListExpirationDateStartFilter,
-                    "expirationDateEnd": this.userListExpirationDateEndFilter
+                    "expirationDateEnd": this.userListExpirationDateEndFilter,
+                    "sortField": this.selectedOrderField,
+                    "sortType": this.sortType
                 }
             })
             .then((response) => {
@@ -765,6 +808,8 @@ export default {
             this.userListLoginFilter = null;
             this.userListExpirationDateStartFilter = null;
             this.userListExpirationDateEndFilter = null;
+            this.sortType = null;
+            this.selectedOrderField = null;
         }
     },
     mounted() {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" class="nav-bar">
-      <b-navbar-brand href="/#/auth">MIS</b-navbar-brand>
+      <b-navbar-brand href="/#/">MIS</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-nav-text><span class="username" v-text="this.$store.state.userTitle"></span></b-nav-text>
 
@@ -41,7 +41,7 @@ export default {
 
 <style scoped>
 .nav-bar {
-  background-color: rgb(67, 100, 161);  
+  background-color: #4364a1;  
   box-shadow: 0 0 10px #333;
 }
 

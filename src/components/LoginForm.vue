@@ -46,7 +46,7 @@ export default {
         "rememberMe" : this.rememberMe,
       }).then(() => {
           this.$loaderEnd();
-          this.$router.push("main");
+          this.$router.push("/");
         }, (error) => {
           this.$loaderEnd();
           console.log(error);
