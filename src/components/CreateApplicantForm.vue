@@ -39,19 +39,19 @@ export default {
         return {
             applicantCreateModalFields: [
                 {
-                    key: 'Title',
+                    key: 'title',
                     type: 'text',
                     label: 'ФИО заявителя'
                 }, {
-                    key: 'PhoneNumber',
+                    key: 'phoneNumber',
                     type: 'text',
                     label: 'Номер телефона'
                 }, {
-                    key: 'Email',
+                    key: 'email',
                     type: 'text',
                     label: 'E-mail'
                 }, {
-                    key: 'Inn',
+                    key: 'inn',
                     type: 'text',
                     label: 'ИНН'
                 }
