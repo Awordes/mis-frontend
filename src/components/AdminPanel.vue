@@ -79,7 +79,7 @@
             </b-row>
         </b-container>
 
-        <b-container class="admin-panel-wr">            
+        <b-container class="admin-panel-wr">
             <b-row>
                 <b-col>
                     <b-table outlined hover responsive 
@@ -520,7 +520,7 @@ export default {
                 {key: 'name', label: 'Наименование'},
                 {key: 'action', label: 'Действия', thStyle: {width: '130px'}}
             ],
-            userEnterprises:[],            
+            userEnterprises:[],
             userEnterpriseModalFields: [
                 {
                     key: 'mercuryId',
@@ -603,7 +603,6 @@ export default {
         },
         createUser() {
             this.$loaderStart();
-            console.log(this.selectedUser);
             Vue.axios.post(this.$baseUrl + '/User', this.selectedUser)
             .then(() => {
                 this.$loaderEnd();

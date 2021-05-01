@@ -32,7 +32,9 @@ const store = new Vuex.Store({
   state () {
     return {
       userTitle: '',
-      roles: []
+      roles: [],
+      expirationDate: '',
+      isLogged: false
     }
   }
 });
@@ -56,6 +58,8 @@ router.beforeEach(async (to, from, next) => {
       .then((response) => {
         store.state.roles = response.data.roles;
         store.state.userTitle = response.data.title;
+        store.state.expirationDate = response.data.expirationDate;
+        store.state.isLogged = true;
         haveAccess = response.data.roles.some(x => to.meta.roles.includes(x));
         resolve(true);
       }, () => {
