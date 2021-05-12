@@ -41,6 +41,29 @@
         <b-container class="vsd-wr">
             <b-row>
                 <b-col>
+                    <b-pagination
+                        v-model="vsdListCurrentPage"
+                        :per-page="vsdListPageSize"
+                        :total-rows="vsdListRowCount"
+                        @change="getVsdList"
+                        align="left"
+                        last-number>
+                    </b-pagination>
+                </b-col>
+                <b-col>
+                    <b-button variant="success" class="submit" 
+                        v-on:click="processVsdList(selectedRows)" 
+                        :disabled="selectedRows.length < 1 || vsdProcessingInProgress">
+                        <b-spinner small :hidden="!vsdProcessingInProgress"></b-spinner>
+                        Погасить выбранные ВСД</b-button>
+                </b-col>
+                <b-col>
+                    <b-button size="sm" variant="outline-info" @click="selectAll" style="margin: 5px;">Выбрать всё</b-button>
+                    <b-button size="sm" variant="outline-primary" @click="clearSelected" style="margin: 5px;">Очистить выделение</b-button>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col>
                     <b-table selectable outlined hover responsive
                         :items="vsdList"
                         :fields="vsdFields"
@@ -61,29 +84,6 @@
                             <span>{{ data.item.expirationDate | moment("DD.MM.YYYY") }}</span>
                         </template>
                     </b-table>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <b-pagination
-                        v-model="vsdListCurrentPage"
-                        :per-page="vsdListPageSize"
-                        :total-rows="vsdListRowCount"
-                        @change="getVsdList"
-                        align="left"
-                        last-number>
-                    </b-pagination>
-                </b-col>
-                <b-col>
-                    <b-button variant="success" class="submit" 
-                        v-on:click="processVsdList(selectedRows)" 
-                        :disabled="selectedRows.length < 1 || vsdProcessingInProgress">
-                        <b-spinner small :hidden="!vsdProcessingInProgress"></b-spinner>
-                        Погасить выбранные ВСД</b-button>
-                </b-col>
-                <b-col>
-                    <b-button size="sm" variant="outline-info" @click="selectAll" style="margin: 5px;">Выбрать всё</b-button>
-                    <b-button size="sm" variant="outline-primary" @click="clearSelected" style="margin: 5px;">Очистить выделение</b-button>
                 </b-col>
             </b-row>
         </b-container>
@@ -236,6 +236,7 @@ export default {
                 this.vsdList = [];
                 this.vsdListRowCount = 0;
                 this.$createNotification('success', 'ВСД успешно погашены', ' ');
+                this.getVsdList(1);
             }, (error) => {
                 console.log(error);
                 clearInterval(this.interval);
