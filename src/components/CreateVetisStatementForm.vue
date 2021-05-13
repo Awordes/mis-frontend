@@ -4,7 +4,7 @@
             id="create-vetis-statement"
             size="lg"
             scrollable 
-            title="Заявка на регистрацию"
+            title="Поля заявки Ветис.API"
             @ok="createVetisStatement"
             :no-enforce-focus="true"
             >

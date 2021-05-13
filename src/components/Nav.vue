@@ -13,8 +13,10 @@
       <b-navbar-nav class="ml-auto" v-if="this.$store.state.isLogged">
         <b-nav-item href="/#/admin" v-if="this.$store.state.roles.includes('admin')">Администрирование</b-nav-item>
         <b-nav-item href="/#/vsd" v-if="this.$store.state.roles.includes('client')">Список ВСД</b-nav-item>
-        <b-nav-item v-b-modal.create-vetis-statement v-if="this.$store.state.roles.includes('guest')">Заполнить заявку на получение доступа к Ветис.API</b-nav-item>
+        <b-nav-item v-b-modal.create-vetis-statement v-if="this.$store.state.roles.includes('guest')">Сгенерировать заявку Ветис.API</b-nav-item>
         <CreateVetisStatementForm/>
+        <b-nav-item v-b-modal.upload-vetis-statement v-if="this.$store.state.roles.includes('guest')">Прикрепить подписанную заявку Ветис.API</b-nav-item>
+        <UploadVetisStatementForm/>
         <b-nav-item href="#" v-on:click="logout">Выход</b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto" v-if="!this.$store.state.isLogged">
@@ -29,12 +31,14 @@
 import Vue from 'vue'
 import CreateApplicantForm from './CreateApplicantForm.vue'
 import CreateVetisStatementForm from './CreateVetisStatementForm.vue'
+import UploadVetisStatementForm from './UploadVetisStatementForm.vue'
 
 export default {
   name: "Nav",
   components: {
     CreateApplicantForm,
-    CreateVetisStatementForm
+    CreateVetisStatementForm,
+    UploadVetisStatementForm
   },
   methods: {
     logout: function() { 
