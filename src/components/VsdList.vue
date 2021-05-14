@@ -24,7 +24,7 @@
                             {{ status.title }}
                         </b-form-select-option>
                     </b-form-select>
-                </b-col>            
+                </b-col>
                 <b-col>
                     <b-form-select v-model="vsdListPageSize">
                         <b-form-select-option v-for="size in vsdListPageSizes" v-bind:value="size.value" v-bind:key="size.value">
@@ -235,6 +235,7 @@ export default {
                 this.vsdProcessingInProgress = false;
                 this.vsdList = [];
                 this.vsdListRowCount = 0;
+                this.selectedRows = [];
                 this.$createNotification('success', 'ВСД успешно погашены', ' ');
                 this.getVsdList(1);
             }, (error) => {
