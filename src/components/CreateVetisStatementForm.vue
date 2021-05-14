@@ -76,7 +76,7 @@ export default {
                 }, {
                     key: 'contactFio',
                     type: 'text',
-                    label: 'Номер контактного лица'
+                    label: 'ФИО контактного лица'
                 }, {
                     key: 'contactPosition',
                     type: 'text',
@@ -106,7 +106,7 @@ export default {
             Vue.axios.post(this.$baseUrl + '/Template/FillTemplate/VetisStatement', {
                 data: this.vetisStatement
             }, {
-                responseType: ['blob', 'application/json']
+                responseType: 'blob'
             })
             .then((response) => {
                 this.$loaderEnd();
@@ -119,7 +119,7 @@ export default {
             }, (error) => {
                 this.$loaderEnd();
                 console.log(error);
-                this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
+                this.$createNotification('danger', 'Ошибка на сервере');
             })
         },
         addEnterprise() {
