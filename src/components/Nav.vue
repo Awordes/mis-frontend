@@ -4,7 +4,7 @@
       <b-navbar-brand href="/#/">MIS</b-navbar-brand>
       <b-navbar-nav v-if="this.$store.state.isLogged">
         <b-nav-text><span class="nav-margin username" v-text="this.$store.state.userTitle"></span></b-nav-text>
-        <b-nav-text>
+        <b-nav-text v-if="this.$store.state.roles.includes('client')">
           <span class="nav-margin">Дата окончания подписки: 
             <span class="username">{{this.$store.state.expirationDate | moment("DD.MM.YYYY")}}</span>
           </span>

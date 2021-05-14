@@ -106,7 +106,7 @@ export default {
             Vue.axios.post(this.$baseUrl + '/Template/FillTemplate/VetisStatement', {
                 data: this.vetisStatement
             }, {
-                responseType: 'blob'
+                responseType: ['blob', 'application/json']
             })
             .then((response) => {
                 this.$loaderEnd();
@@ -114,7 +114,7 @@ export default {
                 let blob = new Blob([response.data], { type:response.headers['content-type'] });
                 let link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
-                link.download = 'Заявление ' + this.vetisStatement.applicantFio;
+                link.download = 'Заявление_' + this.vetisStatement.applicantFio;
                 link.click();
             }, (error) => {
                 this.$loaderEnd();

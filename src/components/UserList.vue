@@ -96,41 +96,34 @@
                             <span>{{ data.item.expirationDate | moment("DD.MM.YYYY") }}</span>
                         </template>
                         <template #cell(action)="data">
-                            <b-row cols="5">
-                                <b-col>
-                                    <b-button v-b-modal.user-edit v-b-tooltip.hover size="sm"
-                                        title="Редактировать пользователя" @click="openUserEdit(data.item.id)">
-                                        <b-icon icon="pencil-square"></b-icon>
-                                    </b-button>
-                                </b-col>
-                                <b-col>
-                                    <b-button v-b-modal.user-role-edit v-b-tooltip.hover size="sm"
-                                        title="Редактировать роли" @click="openRoleEdit(data.item.id)">
-                                        <b-icon icon="card-checklist"></b-icon>
-                                    </b-button>
-                                </b-col>
-                                <b-col>
-                                    <b-button v-b-modal.user-enterprise-list v-b-tooltip.hover size="sm"
-                                        title="Редактировать предприятия" @click="openEnterpriseList(data.item.id)">
-                                        <b-icon icon="stickies"></b-icon>
-                                    </b-button>
-                                </b-col>
-                                <b-col>
-                                    <b-button v-b-modal.user-change-password v-b-tooltip.hover size="sm"
-                                        @click="openPasswordChange(data.item.id)"
-                                        title="Изменить пароль">
-                                        <b-icon icon="vector-pen"></b-icon>
-                                    </b-button>
-                                </b-col>
-                                <b-col>
-                                    <b-button v-b-modal.user-delete v-b-tooltip.hover size="sm"
-                                        @click="openDeleteUser(data.item.id)"
-                                        title="Удалить пользователя"
-                                        variant="danger">
-                                        <b-icon icon="trash"></b-icon>
-                                    </b-button>
-                                </b-col>
-                            </b-row>
+                            <b-button class="mr-1" v-b-modal.user-edit v-b-tooltip.hover size="sm"
+                                title="Редактировать пользователя" @click="openUserEdit(data.item.id)">
+                                <b-icon icon="pencil-square"/>
+                            </b-button>
+                            <b-button class="mr-1" v-b-modal.user-role-edit v-b-tooltip.hover size="sm"
+                                title="Редактировать роли" @click="openRoleEdit(data.item.id)">
+                                <b-icon icon="card-checklist"/>
+                            </b-button>
+                            <b-button class="mr-1" v-b-modal.user-enterprise-list v-b-tooltip.hover size="sm"
+                                title="Редактировать предприятия" @click="openEnterpriseList(data.item.id)">
+                                <b-icon icon="stickies"/>
+                            </b-button>
+                            <b-button class="mr-1" v-b-modal.user-change-password v-b-tooltip.hover size="sm"
+                                @click="openPasswordChange(data.item.id)"
+                                title="Изменить пароль">
+                                <b-icon icon="vector-pen"/>
+                            </b-button>
+                            <b-button class="mr-1" v-b-tooltip.hover size="sm"
+                                @click="getVetisStatement(data.item.id, data.item.title)"
+                                title="Скачать заявление">
+                                <b-icon icon="file-earmark-text"/>
+                            </b-button>
+                            <b-button v-b-modal.user-delete v-b-tooltip.hover size="sm"
+                                @click="openDeleteUser(data.item.id)"
+                                title="Удалить пользователя"
+                                variant="danger">
+                                <b-icon icon="trash"/>
+                            </b-button>
                         </template>
                     </b-table>
                 </b-col>
@@ -727,6 +720,25 @@ export default {
             }, (error) => {
                 this.$loaderEnd();
                 console.log(error);
+                this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
+            })
+        },
+        getVetisStatement(userId, userName) {
+            this.$loaderStart();
+            Vue.axios.post(this.$baseUrl + '/User/' + userId + '/VetisStatement', null, {
+                responseType: ['blob', 'application/json']
+            })
+            .then((response) => {
+                let blob = new Blob([response.data], { type:response.headers['content-type'] });
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'Заявление_' + userName;
+                link.click();
+                this.$loaderEnd();
+                this.$createNotification('success', 'Успешно', 'Заявление успешно получено.');
+            }, (error) => {
+                console.log(error);
+                this.$loaderEnd();
                 this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
             })
         },
