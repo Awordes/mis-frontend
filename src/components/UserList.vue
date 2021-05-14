@@ -726,7 +726,7 @@ export default {
         getVetisStatement(userId, userName) {
             this.$loaderStart();
             Vue.axios.post(this.$baseUrl + '/User/' + userId + '/VetisStatement', null, {
-                responseType: ['blob', 'application/json']
+                responseType: 'blob'
             })
             .then((response) => {
                 let blob = new Blob([response.data], { type:response.headers['content-type'] });
@@ -739,7 +739,7 @@ export default {
             }, (error) => {
                 console.log(error);
                 this.$loaderEnd();
-                this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
+                this.$createNotification('danger', 'Ошибка на сервере');
             })
         },
         openUserEdit(userId) {
