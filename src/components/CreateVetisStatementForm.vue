@@ -106,7 +106,7 @@ export default {
             Vue.axios.post(this.$baseUrl + '/Template/FillTemplate/VetisStatement', {
                 data: this.vetisStatement
             }, {
-                responseType: 'blob'
+                responseType: ['blob', 'json']
             })
             .then((response) => {
                 this.$loaderEnd();
@@ -119,7 +119,7 @@ export default {
             }, (error) => {
                 this.$loaderEnd();
                 console.log(error);
-                this.$createNotification('danger', 'Ошибка на сервере');
+                this.$createNotification('danger', 'Ошибка на сервере', error.response.data.error);
             })
         },
         addEnterprise() {
