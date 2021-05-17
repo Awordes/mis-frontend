@@ -33,7 +33,10 @@
                     </b-form-select>
                 </b-col>
                 <b-col>
-                    <b-button variant="primary" class="submit" v-on:click="getVsdList(1)">Получить список ВДС</b-button>
+                    <b-button :disabled="vsdProcessingInProgress"
+                        variant="primary"
+                        class="submit"
+                        v-on:click="getVsdList(1)">Получить список ВДС</b-button>
                 </b-col>
             </b-row>
         </b-container>
