@@ -43,7 +43,7 @@
         
         <b-container class="vsd-wr">
             <b-row>
-                <b-col>
+                <b-col sm="4">
                     <b-pagination
                         v-model="vsdListCurrentPage"
                         :per-page="vsdListPageSize"
@@ -53,14 +53,17 @@
                         last-number>
                     </b-pagination>
                 </b-col>
-                <b-col>
+                <b-col sm="2">
+                    <p>Количество ВСД: {{vsdListTotalCount}}<p/>
+                </b-col>
+                <b-col sm="3">
                     <b-button variant="success" class="submit" 
                         v-on:click="processVsdList(selectedRows)" 
                         :disabled="selectedRows.length < 1 || vsdProcessingInProgress">
                         <b-spinner small :hidden="!vsdProcessingInProgress"></b-spinner>
                         Погасить выбранные ВСД</b-button>
                 </b-col>
-                <b-col>
+                <b-col sm="3">
                     <b-button size="sm" variant="outline-info" @click="selectAll" style="margin: 5px;">Выбрать всё</b-button>
                     <b-button size="sm" variant="outline-primary" @click="clearSelected" style="margin: 5px;">Очистить выделение</b-button>
                 </b-col>
@@ -85,6 +88,9 @@
                         </template>
                         <template #cell(issueDate)="data">
                             <span>{{ data.item.issueDate | moment("DD.MM.YYYY") }}</span>
+                        </template>
+                        <template #cell(processDate)="data">
+                            <b-form-input type="date" v-model="data.item.processDate" />
                         </template>
                     </b-table>
                 </b-col>
@@ -148,7 +154,8 @@ export default {
                 {key: 'productDate', label: 'Дата выработки'},
                 {key: 'name', label: 'Наименование'},
                 {key: 'volume', label: 'Объем'},
-                {key: 'productGlobalId', label: 'Номер продукции'}
+                {key: 'productGlobalId', label: 'Номер продукции'},
+                {key: 'processDate', label: 'Дата поступления товара', thStyle: {width: '13%'}}
             ],
             vsdList: [],
             selectedRows:[],
@@ -176,6 +183,7 @@ export default {
             vsdListPageSize: 10,
             vsdListCurrentPage: null,
             vsdListRowCount: 0,
+            vsdListTotalCount: 0,
             vsdProcessTransactionFields: [
                 {key: 'id', label: 'Идентификатор транзакции', thStyle: {width: '25%'}},
                 {key: 'startTime', label: 'Начало', thStyle: {width: '13%'}},
@@ -206,7 +214,13 @@ export default {
             .then((response) => {
                 this.vsdListIsLoading = false;
                 this.vsdList = response.data.result;
+
+                for (var vsd in this.vsdList) {
+                    this.vsdList[vsd].processDate = this.$moment(this.vsdList[vsd].processDate).format("YYYY-MM-DD");
+                }
+
                 this.vsdListRowCount = response.data.elementCount;
+                this.vsdListTotalCount = response.data.elementCount;
             }, (error) => {
                 console.log(error);
                 this.vsdListIsLoading = false;
@@ -223,14 +237,20 @@ export default {
         },
         
         onRowSelected(items) {
-            this.selectedRows = items.map(item => item.id);
+            this.selectedRows = [];
+            items.forEach(element => {
+                this.selectedRows.push({
+                    'vsdId': element.id,
+                    'processDate': element.processDate,
+                });
+            });
         },
-        processVsdList(uuids) {
+        processVsdList(vsds) {
             this.interval = setInterval(() => this.getVsdProcessTransactionList(1), 1000);
             this.vsdProcessingInProgress = true;
             Vue.axios.post(this.$baseUrl + '/Vsd/ProcessVsdList', {
                 "enterpriseId": this.selectedEnterprise,
-                "uuids": uuids
+                "vsds": vsds
             })
             .then(() => {
                 clearInterval(this.interval);
@@ -313,6 +333,7 @@ export default {
     margin-top: 40px;
     margin-bottom: 20px;    
     padding: 15px;
+    max-width: 1330px;
 }
 
 .vsd-log {
