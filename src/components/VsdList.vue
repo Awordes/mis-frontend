@@ -83,8 +83,8 @@
                         <template #cell(productDate)="data">
                             <span>{{ data.item.productDate | moment("DD.MM.YYYY") }}</span>
                         </template>
-                        <template #cell(expirationDate)="data">
-                            <span>{{ data.item.expirationDate | moment("DD.MM.YYYY") }}</span>
+                        <template #cell(issueDate)="data">
+                            <span>{{ data.item.issueDate | moment("DD.MM.YYYY") }}</span>
                         </template>
                     </b-table>
                 </b-col>
@@ -144,8 +144,8 @@ export default {
             selectMode: 'multi',
             vsdFields:[
                 {key: 'id', label: 'Идентификатор ВСД'},
+                {key: 'issueDate', label: 'Дата оформления ВСД'},
                 {key: 'productDate', label: 'Дата выработки'},
-                {key: 'expirationDate', label: 'Дата окончания срока годности'},
                 {key: 'name', label: 'Наименование'},
                 {key: 'volume', label: 'Объем'},
                 {key: 'productGlobalId', label: 'Номер продукции'}
