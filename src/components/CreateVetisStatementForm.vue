@@ -106,7 +106,7 @@ export default {
             Vue.axios.post(this.$baseUrl + '/Template/FillTemplate/VetisStatement', {
                 data: this.vetisStatement
             }, {
-                responseType: ['blob', 'json']
+                responseType: ['arraybuffer']
             })
             .then((response) => {
                 this.$loaderEnd();
