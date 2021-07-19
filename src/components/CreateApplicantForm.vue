@@ -54,6 +54,14 @@ export default {
                     key: 'inn',
                     type: 'text',
                     label: 'ИНН'
+                }, {
+                    key: 'mercuryLogin',
+                    type: 'text',
+                    label: 'Логин Меркурия'
+                }, {
+                    key: 'mercuryPassword',
+                    type: 'text',
+                    label: 'Пароль Меркурия'
                 }
             ],
             applicant: {}
