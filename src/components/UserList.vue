@@ -200,6 +200,17 @@
                         ></b-form-input>
                     </b-col>
                 </b-row>
+                <b-row class="modal-field">
+                    <b-col sm="3">
+                        <label>Доступ к автогашению ВСД</label>
+                    </b-col>
+                    <b-col sm="9">
+                        <b-form-checkbox
+                        v-model="selectedUser['autoVsdProcess']"
+                        :disabled="!disableForm"
+                        ></b-form-checkbox>
+                    </b-col>
+                </b-row>
             </b-container>
         </b-modal>
 

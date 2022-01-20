@@ -100,7 +100,7 @@ export default {
         }
     },
     methods: {
-        createVetisStatement() {            
+        createVetisStatement() {
             this.$loaderStart();
             this.vetisStatement.enterprises = this.enterprises;
             Vue.axios.post(this.$baseUrl + '/Template/FillTemplate/VetisStatement', {
