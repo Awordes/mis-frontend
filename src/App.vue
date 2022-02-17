@@ -32,4 +32,7 @@ html {
   background-size: cover;  
   background-repeat: no-repeat;
 }
+.b-toaster-top-right {
+  top: 60px !important;
+}
 </style>
